@@ -22,12 +22,12 @@ Además:
 
 ## Sistema de diseño
 
-Toda la interfaz sale de una sola hoja de estilos con tokens, al principio de `index.html`. Los componentes no usan colores sueltos, solo `var(--…)`. Hay una página de referencia en la propia demo: **Perfil → Sistema de diseño** (`#/sistema`).
+Toda la interfaz sale de una sola hoja de estilos con tokens, al principio de `index.html`. Los componentes no usan colores sueltos, solo `var(--…)`.
 
 | Grupo | Tokens |
 |---|---|
-| Marca (paleta Atardecer vivo, igual en claro y oscuro) | `--coral` `--apricot` `--green` `--pink` `--lilac` `--mint` `--star`, y `--on-color` para el texto sobre ellos |
-| Superficies y texto (cambian en modo oscuro, gris grafito) | `--bg` `--surface` `--surface-2` `--line` `--text` `--muted` `--ink` `--on-ink` `--accent` |
+| Marca (paleta Atardecer vivo) | `--coral` `--apricot` `--green` `--pink` `--lilac` `--mint` `--star`, y `--on-color` para el texto sobre ellos |
+| Superficies y texto | `--bg` `--surface` `--surface-2` `--line` `--text` `--muted` `--ink` `--on-ink` `--accent` |
 | Estados | `--ok` `--warn` `--danger` |
 | Forma | `--r-xs` 4 · `--r-sm` 8 · `--r-md` 12 · `--r-lg` 16 · `--r-xl` 22 · `--r-pill` |
 | Sombras | `--sh-1` tarjetas · `--sh-2` elementos flotantes · `--sh-3` diálogos |

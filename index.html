@@ -19,7 +19,7 @@
 
 /* ---------- 1. Tokens ---------- */
 :root{
-  /* Marca (paleta Atardecer vivo): iguales en claro y oscuro */
+  /* Marca (paleta Atardecer vivo) */
   --coral:#FF7F6E; --apricot:#FFB86B; --green:#8BC34A;
   --pink:#F7A1B5; --lilac:#C9A7EB; --mint:#7FCFC4; --star:#F59E0B;
   --on-color:#16142B;               /* texto sobre cualquier color de marca */
@@ -58,18 +58,6 @@
   /* Papel (visor de documentos): siempre claro */
   --paper:#FFFFFF; --paper-ink:#1D1B22; --paper-muted:#6B6577; --paper-line:#EEE6E0; --paper-soft:#FFF0E8;
   --viewer-bg:#2B2B2E; --viewer-bar:#1C1C1E;
-
-  color-scheme:light;
-}
-:root.dark{
-  --bg:#121212; --surface:#1C1C1E; --surface-2:#252527; --line:#333336;
-  --text:#F5F5F5; --muted:#B5B5BA;
-  --ink:#F5F5F5; --on-ink:#121212; --accent:#FF9A8B;
-  --nav:#2C2C2F; --logo:#F5F5F5; --bubble-me:var(--coral); --on-bubble-me:var(--on-color);
-  --ok:#9CCB8A; --warn:#FFB86B; --danger:#FF9A8B;
-  --sh-1:0 2px 4px rgba(0,0,0,.35),0 10px 28px rgba(0,0,0,.4);
-  --sh-2:0 10px 30px rgba(0,0,0,.5);
-  color-scheme:dark;
 }
 
 /* ---------- 2. Base ---------- */
@@ -299,10 +287,6 @@ dialog::backdrop{background:rgba(20,15,10,.45)}
 .toast{position:fixed;left:50%;bottom:150px;transform:translate(-50%,20px);opacity:0;transition:.25s;z-index:60;background:var(--text);color:var(--bg);padding:11px var(--sp-4);border-radius:var(--r-lg);font-size:14px;font-weight:600;max-width:calc(100% - 32px);text-align:center;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
-/* Sistema de diseño (página de referencia) */
-.ds-sw{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-2)}
-.ds-sw div{border-radius:var(--r-md);padding:44px 6px 6px;font-size:10.5px;font-weight:700;color:var(--on-color);border:1px solid var(--line)}
-.ds-sw div span{display:block;font-weight:500;opacity:.75}
 
 /* ---------- 6. Visor de documentos (papel siempre claro) ---------- */
 dialog.viewer{width:100%;max-width:none;height:100%;max-height:none;margin:0;border-radius:0;background:var(--viewer-bg);color:#FFFFFF;padding:0;overflow:hidden}
@@ -900,7 +884,7 @@ function vYo(){
   </section>
   <section class="section card" style="background:var(--surface-2);box-shadow:none">
     <p class="small" style="margin:0"><b>Esto es una demo.</b> Los perfiles, proyectos y pagos son inventados: no se cobra nada ni se guarda ningún dato. Si recargas la página, todo vuelve a empezar.</p>
-    <div class="row wrap" style="margin-top:10px"><button class="btn sm ghost" data-act="theme">Cambiar tema claro/oscuro</button><button class="btn sm ghost" data-act="share">Compartir la demo</button><button class="btn sm ghost" data-act="persona-open">Cambiar tipo de usuario</button><a class="btn sm ghost" href="#/sistema">Sistema de diseño</a></div>
+    <div class="row wrap" style="margin-top:10px"><button class="btn sm ghost" data-act="share">Compartir la demo</button><button class="btn sm ghost" data-act="persona-open">Cambiar tipo de usuario</button></div>
   </section>`;
 }
 
@@ -1017,59 +1001,14 @@ function openCompare(pid){
       <div class="row" style="margin-top:10px;gap:8px"><button class="btn sm ghost" data-act="doc" data-doc="${s.doc}">Ver prueba</button><button class="btn sm" style="flex:1" data-act="choose" data-id="${u.id}" data-p="${p.id}">Elegir a ${u.name.split(' ')[0]}</button></div></div>`; }).join('')}</div>
     <p class="small muted" style="margin:12px 0 0">El precio es orientativo para la novela completa (82.000 palabras).</p>`);
 }
-// ===== Sistema de diseño: referencia visual de tokens y componentes =====
-function vSistema(){
-  const sw = (n, v, mode) => `<div style="background:var(${v})${mode === 1 ? ';color:#fff' : mode === 2 ? ';color:var(--text)' : ''}">${n}<span>${v}</span></div>`;
-  return `
-  <a class="back" href="#/yo">${icoBack}Perfil</a>
-  <h1>Sistema de diseño</h1>
-  <p class="muted small" style="margin:4px 0 0">Todo en Path 6 sale de estas piezas. Paleta Atardecer vivo, tipografía Plus Jakarta Sans y Literata para leer.</p>
-
-  <section class="section"><div class="section-head"><h2>Color de marca</h2></div>
-    <div class="ds-sw">${sw('Coral','--coral')}${sw('Albaricoque','--apricot')}${sw('Verde','--green')}${sw('Rosa','--pink')}${sw('Lila','--lilac')}${sw('Menta','--mint')}${sw('Estrella','--star')}${sw('Tinta','--on-color',1)}</div>
-    <p class="small muted">Se usan igual en claro y en oscuro. Sobre cualquier color de marca, el texto va en tinta.</p></section>
-
-  <section class="section"><div class="section-head"><h2>Superficies y texto</h2></div>
-    <div class="ds-sw">${sw('Fondo','--bg',2)}${sw('Superficie','--surface',2)}${sw('Superficie 2','--surface-2',2)}${sw('Línea','--line',2)}</div>
-    <p class="small muted">Cambian con el modo oscuro (gris grafito neutro).</p></section>
-
-  <section class="section"><div class="section-head"><h2>Tipografía</h2></div>
-    <div class="card"><p style="margin:0;font-size:var(--fs-xxl);font-weight:800;letter-spacing:-.02em">Nombre · 30</p><h1>Título · 26</h1><h2>Sección · 18</h2><p style="margin:4px 0">Texto · 15</p><p class="small muted" style="margin:0">Secundario · 13</p><p class="cline">«El río bajaba lento…» · Literata para documentos</p></div></section>
-
-  <section class="section"><div class="section-head"><h2>Forma</h2></div>
-    <div class="row wrap">${[['xs','--r-xs'],['sm','--r-sm'],['md','--r-md'],['lg','--r-lg'],['xl','--r-xl']].map(([n,v]) => `<div style="width:56px;height:56px;border-radius:var(${v});background:var(--surface-2);border:1px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:700">${n}</div>`).join('')}</div>
-    <p class="small muted">Tarjetas xl · campos md · etiquetas sm · botones y filtros en pastilla.</p></section>
-
-  <section class="section"><div class="section-head"><h2>Botones y filtros</h2></div>
-    <div class="row wrap"><span class="btn">Principal</span><span class="btn ghost">Secundario</span><span class="btn line">Contorno</span><span class="btn sm">Pequeño</span></div>
-    <div class="chips" style="margin-top:12px"><span class="chip" aria-pressed="true">Activo</span><span class="chip">Filtro</span></div></section>
-
-  <section class="section"><div class="section-head"><h2>Etiquetas</h2></div>
-    <div class="row wrap" style="gap:6px">${['lector','corrector','ilustrador','autor'].map(roleTag).join('')}</div>
-    <div class="row wrap" style="gap:6px;margin-top:8px">${['junior','intermedio','senior'].map(l => levelTag({ level:l })).join('')}${GENRES.map(genreTag).join('')}</div>
-    <div class="row wrap" style="gap:12px;margin-top:10px"><span class="status progress">● En curso</span><span class="status delivered">● Entregado</span><span class="status done">✓ Completado</span><span class="price">5 €</span></div></section>
-
-  <section class="section"><div class="section-head"><h2>Tarjetas</h2></div>
-    <div class="stack"><div class="card"><b>Tarjeta</b><div class="small muted">Personas, perfiles y contenido principal.</div></div>
-    <div class="card req"><b>Tarjeta suave</b><div class="small muted">Solicitudes y listas secundarias.</div></div>
-    <section class="next" style="margin-top:0"><b>Bloque destacado</b><div class="small">El siguiente paso. Uno por pantalla.</div></section>
-    <div class="card soonbox"><b>Próximamente</b><div class="small muted">Funciones que llegarán.</div></div></div></section>
-
-  <section class="section"><div class="section-head"><h2>Personas, libros y camino</h2></div>
-    <div class="card"><div class="row">${avatar(byId('lucia'))}${avatar(byId('pablo'))}${avatar(byId('irene'))}${cover(BASE.projects[0])}${cover(BASE.projects[1])}</div>
-    <div class="path">${STAGES.map((s,i) => `<div class="st ${i <= 1 ? 'on' : ''} ${i === 1 ? 'now' : ''}"><div class="bar"></div>${s.split(' ')[0]}</div>`).join('')}</div></div></section>
-
-  <section class="section"><div class="section-head"><h2>Insignias</h2></div>
-    <div class="badge-grid"><div class="badge"><span class="b">🌱</span>Conseguida</div><div class="badge"><span class="b">🤝</span>Conseguida</div><div class="badge locked"><span class="b">🏆</span>Pendiente</div></div></section>`;
-}
 // ===== Router =====
 function route(){
   const [pathPart, qs=''] = location.hash.replace(/^#\/?/,'').split('?');
   const rq = new URLSearchParams(qs).get('r'); if (rq && ROLES[rq]) { filters.role = rq; history.replaceState(null, '', '#/' + pathPart); }
   const [page='', id=''] = pathPart.split('/');
-  const map = { '':vInicio, buscar:vBuscar, perfil:()=>vPerfil(id), proyectos:vProyectos, proyecto:()=>vProyecto(id), mensajes:vMensajes, yo:vYo, encargo:vEncargo, sistema:vSistema };
+  const map = { '':vInicio, buscar:vBuscar, perfil:()=>vPerfil(id), proyectos:vProyectos, proyecto:()=>vProyecto(id), mensajes:vMensajes, yo:vYo, encargo:vEncargo };
   view.innerHTML = (map[page] || vInicio)();
-  const tab = {'' :'inicio', perfil:'buscar', proyecto:'proyectos', encargo:'inicio', sistema:'yo'}[page] ?? page;
+  const tab = {'' :'inicio', perfil:'buscar', proyecto:'proyectos', encargo:'inicio'}[page] ?? page;
   document.querySelectorAll('.tab').forEach(t => {
     if (t.dataset.tab === tab) t.setAttribute('aria-current','page'); else t.removeAttribute('aria-current');
   });
@@ -1225,7 +1164,6 @@ document.addEventListener('click', e => {
   if (a==='simulate-delivery') { const p=projById(el.dataset.p), m=p.team[+el.dataset.i]; m.status='delivered'; p.chat.push({from:m.uid, t:'¡Listo! Te he subido la entrega 📎'}); rerender(); toast('Entrega recibida'); return; }
   if (a==='new-request') { openNewRequest(); return; }
   if (a==='accept') { const p=projById(el.dataset.p), r=p.requests[+el.dataset.r]; openHire(el.dataset.id,{project:p.id, price:r.budget, request:{p:p.id, ri:+el.dataset.r}}); return; }
-  if (a==='theme') { document.documentElement.classList.toggle('dark'); return; }
   if (a==='hire-next') {
     if (hire.step===0){ const c = body.querySelector('input[name=pkg]:checked'); hire.pkg = c ? +c.value : 0; hire.project = $('#hproj').value; }
     hire.step++; if (hire.step === 2 && (hire.price ?? hire.u.packages[hire.pkg].p) === 0) { hireFreeDone(); return; } hireStep(); return;
