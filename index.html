@@ -70,7 +70,7 @@ main{padding:16px}
 .avatars{display:flex}.avatars .avatar+.avatar{margin-left:-8px}
 .chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:6px 12px;font-size:13px;font-weight:600;white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--ink-text);border-color:transparent}
-.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding-bottom:4px}
 .chips::-webkit-scrollbar{display:none}
 .tag{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:3px 9px;border-radius:8px;background:color-mix(in srgb,var(--c,#B5B5BA) 30%,#fff);color:#16142B}
 .verified svg{color:#FF7F6E}
