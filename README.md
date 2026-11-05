@@ -11,7 +11,7 @@ Es una sola página (`index.html`), sin servidor ni base de datos. Todo es inven
 Al entrar eliges cómo ver la app. Desde el perfil puedes cambiarlo cuando quieras.
 
 - **Autor/a (Ana):** el camino de su libro en 6 etapas, contratar con pago protegido, aprobar entregas, pedir pruebas gratis de un capítulo a varios profesionales y compararlas antes de pagar.
-- **Lector/a beta (Lucía), corrector/a (Pablo) o ilustrador/a de portada (Irene):** su tramo dentro del camino del libro de Ana y un encargo simulado de principio a fin (Ana escribe, aceptas, entregas un PDF y cobras o te eligen). También su precio recomendado.
+- **Lector/a beta (Lucía), corrector/a (Pablo) o ilustrador/a de portada (Irene):** su propio camino profesional, hecho de experiencia (del primer encargo a profesional), y un encargo simulado de principio a fin (Ana escribe, aceptas, entregas un PDF y cobras o te eligen). También su precio recomendado.
 
 Además:
 
