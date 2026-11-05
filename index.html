@@ -325,6 +325,45 @@ dialog.viewer::backdrop{background:#000}
 .cnote.done{opacity:.55}
 .cnum{font-size:10px;margin-top:3px}
 .cact{display:flex;gap:var(--sp-3);margin-top:var(--sp-1)}
+/* ---------- 7. Escritorio (web) ---------- */
+.only-d{display:none}
+.side-logo{display:none}
+.prow{position:relative;display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:8px 4px 4px}
+.prow::before{content:'';position:absolute;left:8.33%;right:8.33%;top:36px;border-top:2px dashed color-mix(in srgb,var(--text) 30%,transparent)}
+.pnode{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;text-decoration:none;color:inherit}
+.pnode .pdot{width:56px;height:56px;border-radius:50%;background:var(--f);display:grid;place-items:center;font:800 20px var(--font-ui);color:var(--muted);position:relative}
+.pnode .pdot svg{width:52px;height:52px;display:block}
+.pnode.s-next .pdot{border:2px dashed color-mix(in srgb,var(--text) 35%,transparent)}
+.pnode.s-now .pdot{box-shadow:0 0 0 3px var(--on-color),0 0 0 9px color-mix(in srgb,var(--coral) 35%,transparent)}
+.pnode b{font-size:var(--fs-sm);margin-top:4px}
+.pnode small{font-size:var(--fs-xs);color:var(--muted);line-height:1.3}
+@media (min-width:1024px){
+  .only-m{display:none} .only-d{display:block}
+  .app{max-width:none;margin:0 0 0 240px;padding-bottom:48px}
+  .topbar{padding:14px 40px}
+  .topbar .logo,.topbar .pill{display:none}
+  main{max-width:1120px;margin:0 auto;padding:32px 40px}
+  .tabs{top:0;bottom:0;left:0;right:auto;width:240px;padding:0;pointer-events:auto}
+  .tabs nav{height:100%;max-width:none;display:flex;flex-direction:column;gap:6px;border-radius:0;padding:24px 16px;box-shadow:none}
+  .side-logo{display:flex;color:#FFFFFF;padding:4px 12px 28px}
+  .side-logo .mark circle,.side-logo .mark path{fill:#FFFFFF}
+  .side-logo span{color:#FFFFFF}
+  .tab{flex-direction:row;gap:12px;padding:12px 14px;font-size:15px;border-radius:var(--r-md);justify-content:flex-start}
+  .tab svg{width:22px;height:22px}
+  .tab[aria-current="page"]{background:var(--coral);color:var(--on-color)}
+  .tab[aria-current="page"]::after{display:none}
+  .fab{right:40px;bottom:40px}
+  .toast{bottom:40px}
+  h1{font-size:34px}
+  .uname{font-size:44px}
+  .avatar.lg{width:88px;height:88px}
+  .home{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:24px;align-items:start;margin-top:20px}
+  .home .hmain>.card:first-child{margin-top:0!important}
+  .home .hside>.section:first-child{margin-top:0}
+  #results,.pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  #results>*+*,.pgrid>*+*{margin-top:0}
+  .exp{grid-template-columns:repeat(4,1fr)}
+}
 </style>
 </head>
 <body>
@@ -546,7 +585,19 @@ function stagePerson(p, i){
   const m = p.team.find(m => byId(m.uid).roles.includes(r));
   return m ? byId(m.uid) : null;
 }
-function pathMap(p){
+// Camino en horizontal (escritorio): las mismas 6 etapas que el mapa.
+function pathRow(p, noLinks){
+  return `<div class="prow" role="list">${STAGES.map((s, i) => {
+    const u = stagePerson(p, i), state = i < p.stage ? 'done' : i === p.stage ? 'now' : 'next';
+    const delivered = u && p.team.some(m => m.uid === u.id && m.status === 'delivered');
+    const sub = i === 5 ? (state === 'done' ? '¡Publicado!' : 'Tu libro') : u ? ((u === ME || (SRC() && u.id === SRC().id)) ? 'Tú' : u.name.split(' ')[0]) + (delivered ? ' · entrega lista' : '') : i === 4 ? 'Próximamente' : 'Busca a alguien';
+    const href = u && u !== ME && u.id !== 'base-ana' ? `#/perfil/${u.id}` : (!u && STAGE_ROLE[i]) ? `#/buscar?r=${STAGE_ROLE[i]}` : '';
+    const fill = state === 'next' ? 'var(--surface)' : NODE_C[i % 3];
+    const inner = u ? `<svg viewBox="0 0 52 52">${personSVG(26, 26, 24, u, fill)}</svg>` : `<span>${i === 5 ? '★' : i === 4 ? '…' : '+'}</span>`;
+    const tag = href && !noLinks ? 'a' : 'div';
+    return `<${tag} role="listitem" class="pnode s-${state}" ${href ? `href="${href}"` : ''}><span class="pdot" style="--f:${fill}">${inner}</span><b>${s}</b><small>${sub}</small></${tag}>`;
+  }).join('')}</div>`;
+}function pathMap(p){
   const pts = [[62,44],[262,110],[78,184],[262,258],[78,332],[250,402]];
   const seg = (a,b) => `C ${a[0]} ${a[1]+50}, ${b[0]} ${b[1]-50}, ${b[0]} ${b[1]}`;
   let d = `M ${pts[0][0]} ${pts[0][1]}`, done = d;
@@ -677,11 +728,13 @@ function vInicio(){
   const rec = ['lucia','pablo','irene'].map(byId);
   return `
   <section class="greet">${avatar(ME,'lg')}<div><p class="small muted" style="margin:0">${greeting()}</p><h1 class="uname">${ME.name}</h1></div></section>
+  <div class="home"><div class="hmain">
   <div class="card mapcard" style="margin-top:16px">
     <a class="row" href="#/proyecto/${p.id}" style="gap:12px;padding:10px 12px 2px;text-decoration:none;align-items:center">${cover(p)}<div><p class="small muted" style="margin:0">Tu novela</p><h2 style="margin:2px 0">${p.title}</h2><p class="small muted" style="margin:0">Etapa ${p.stage+1} de 6 · ${STAGES[p.stage]}</p></div></a>
-    ${pathMap(p)}
+    <div class="only-m">${pathMap(p)}</div><div class="only-d">${pathRow(p)}</div>
   </div>
   <section class="next">${nextStep(p)}</section>
+  </div><div class="hside">
 
   <section class="section">
     <div class="section-head"><h2>Personas para tu camino</h2><a href="#/buscar">Ver todo</a></div>
@@ -704,7 +757,8 @@ function vInicio(){
     <h2>¿Te gustaría usar Path 6 de verdad?</h2>
     <p class="muted" style="margin:6px 0 14px">Cuéntanos qué te ha parecido la demo y apúntate a la beta. Son 2 minutos.</p>
     <div class="row wrap" style="justify-content:center"><button class="btn" data-act="waitlist">Quiero probarla</button><button class="btn ghost" data-act="share">Compartir con amigos</button></div>
-  </section>`}`;
+  </section>`}
+  </div></div>`;
 }
 
 function vBuscar(){
@@ -767,7 +821,7 @@ function vPerfil(id){
 function vProyectos(){
   return `
   <div class="row" style="justify-content:space-between"><h1>Mis proyectos</h1><button class="btn sm" data-act="new-request">+ Solicitud</button></div>
-  <div class="stack" style="margin-top:16px">${PROJECTS.length ? '' : `<div class="card empty">${ME.roles[0] === 'autor' ? 'Crea tu primer proyecto con el botón +.' : 'Cuando un autor te elija, su proyecto aparecerá aquí.'}</div>`}${PROJECTS.map(p=>`
+  <div class="stack pgrid" style="margin-top:16px">${PROJECTS.length ? '' : `<div class="card empty">${ME.roles[0] === 'autor' ? 'Crea tu primer proyecto con el botón +.' : 'Cuando un autor te elija, su proyecto aparecerá aquí.'}</div>`}${PROJECTS.map(p=>`
     <a class="card card-link tint" style="--c:${p.tint}" href="#/proyecto/${p.id}"><div class="row" style="align-items:flex-start">
       ${cover(p)}
       <div style="flex:1;min-width:0">
@@ -1187,9 +1241,11 @@ function vInicioPro(){
   const earned = { lector:'45 €', corrector:'0 €', ilustrador:'120 €' }[role];
   return `
   <section class="greet">${avatar(ME,'lg')}<div><p class="small muted" style="margin:0">${greeting()}</p><h1 class="uname">${esc(ME.name)}</h1><div class="row" style="gap:6px;margin-top:6px">${roleTag(role)}${levelTag(s)}</div></div></section>
+  <div class="home"><div class="hmain">
   ${jobCard()}
   <div class="stats"><div><b>${s.jobs}</b><span>trabajos</span></div><div><b>${s.jobs ? '★ ' + s.rating.toLocaleString('es-ES') : '—'}</b><span>valoración</span></div><div><b>${earned}</b><span>este mes</span></div></div>
   ${workSection()}
+  </div><div class="hside">
   ${fairPrice(s, true)}
   <section class="section"><div class="section-head"><h2>Solicitudes para ti</h2></div>
     <div class="stack">${reqs.length ? reqs.map(r => `
@@ -1200,7 +1256,8 @@ function vInicioPro(){
         <div class="row" style="justify-content:space-between"><span class="price">${r.budget}</span>
         ${r.applied ? '<span class="status done">✓ Postulación enviada</span>' : `<button class="btn sm" data-act="apply-req" data-i="${r.i}">Postularme</button>`}</div>
       </article>`).join('') : '<div class="card empty">Pronto habrá solicitudes para tu servicio.</div>'}</div>
-  </section>`;
+  </section>
+  </div></div>`;
 }// Si ya se creó un usuario en este navegador, se carga al abrir.
 try { localStorage.removeItem('path6-user'); } catch(e) {}
 // ===== Tipo de usuario: ver la demo como autor/a, lector/a beta, corrector/a o ilustrador/a =====
@@ -1279,7 +1336,7 @@ function jobCard(){
     <div class="row" style="gap:12px;padding:10px 12px 2px;align-items:center">${cover(p)}<div style="min-width:0"><p class="small muted" style="margin:0">Tu encargo actual · de Ana Ruiz</p><h2 style="margin:2px 0">${p.title}</h2><p class="small" style="margin:0">${j.service} · ${j.price ? eur(j.price) : 'Gratis'}</p></div></div>
     <div class="tl" style="padding:0 12px">${JOB_STATES.map((s,i) => `<span class="${i <= jobIdx(j) ? 'on' : ''}">${s}</span>`).join('')}</div>
     <p class="small muted" style="margin:10px 12px 0">Tu tramo en el camino del libro:</p>
-    ${pathMap(jobProject(j))}
+    <div class="only-m">${pathMap(jobProject(j))}</div><div class="only-d" style="padding:0 12px">${pathRow(jobProject(j), true)}</div>
     <div style="padding:0 12px 12px"><span class="btn sm block">${j.state === 'request' ? 'Ver la solicitud de Ana' : 'Abrir encargo'}</span></div></a>`;
 }
 function jobAction(j){
@@ -1335,7 +1392,8 @@ function jobAct(a){
     else { j.chat.push({ from:'base-ana', t:'¡Me ha encantado! Muy claro y útil. Lo apruebo ✨' }); j.chat.push({ from:'sys', t:`Ana ha aprobado la entrega. Path 6 te ha liberado ${eur(j.price,true)}. Valoración: ★★★★★` }); }
     rerender(); scrollJobChat(); return; }
   if (a === 'job-next') { Object.assign(j, { service:j.next.service, price:j.next.price, fileName:j.next.fileName, state:'accepted', deadline:'3 semanas', next:null }); j.chat.push({ from:'pro', t:'¡Claro que sí! Empiezo con la novela completa.' }); j.chat.push({ from:'sys', t:`Ana ha pagado ${eur(j.price,true)}. Path 6 lo guarda hasta que apruebe la entrega.` }); rerender(); toast('Nuevo encargo aceptado'); return; }
-}let savedPersona = null;
+}{ const nav = document.querySelector('.tabs nav'), lg = document.querySelector('.topbar .logo').cloneNode(true); lg.classList.add('side-logo'); lg.setAttribute('aria-label','Path 6, inicio'); nav.prepend(lg); }
+let savedPersona = null;
 try { savedPersona = localStorage.getItem('path6-persona'); } catch(e) {}
 if (savedPersona && PERSONAS[savedPersona]) setPersona(savedPersona); else ME.persona = 'autor';
 window.addEventListener('hashchange', route);
