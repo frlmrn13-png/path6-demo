@@ -1361,7 +1361,7 @@ function vEncargo(){
   <section class="card"><div class="row" style="align-items:flex-start;gap:12px">${cover(p)}<div><p class="small muted" style="margin:0">de Ana Ruiz · Novela · Romance</p><h1 style="font-size:22px">${p.title}</h1><p class="small" style="margin:4px 0 0">${j.service}</p><p class="small muted" style="margin:0">${j.price ? eur(j.price,true) : 'Gratis'} · plazo ${j.deadline}</p></div></div>
     <div class="tl">${JOB_STATES.map((s,i) => `<span class="${i <= jobIdx(j) ? 'on' : ''}">${s}</span>`).join('')}</div></section>
   <section class="next">${jobAction(j)}</section>
-  <section class="section"><div class="section-head"><h2>Tu tramo en su camino</h2></div><div class="card mapcard">${pathMap(jobProject(j))}</div></section>
+  <section class="section"><div class="section-head"><h2>Tu tramo en su camino</h2></div><div class="card mapcard"><div class="only-m">${pathMap(jobProject(j))}</div><div class="only-d">${pathRow(jobProject(j), true)}</div></div></section>
   <section class="section" id="chat"><div class="section-head"><h2>Chat con Ana</h2></div>
     <div class="card"><div class="chat">${j.chat.map(jobMsg).join('')}</div>
     <form class="composer" id="jcomposer"><input name="t" placeholder="Escribe a Ana…" aria-label="Mensaje" autocomplete="off"><button class="btn" aria-label="Enviar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 12 20 4l-6 16-3-7z"/></svg></button></form></div>
